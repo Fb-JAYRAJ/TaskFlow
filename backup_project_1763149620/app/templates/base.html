@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TaskFlow{% endblock %}</title>
+
+  <link href="{{ url_for('static', filename='css/app.css') }}?v={{ config['SECRET_KEY'] }}" rel="stylesheet">
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+<div class="min-h-screen flex">
+
+  <!-- SIDEBAR -->
+  <aside class="hidden md:flex md:w-64 md:flex-col bg-white border-r">
+    <div class="p-6">
+      <a href="{{ url_for('dashboard.home') }}" class="flex items-center gap-3">
+        <div class="h-10 w-10 flex items-center justify-center bg-indigo-600 text-white font-bold rounded-lg">TF</div>
+        <span class="text-xl font-semibold">TaskFlow</span>
+      </a>
+    </div>
+
+    <nav class="px-4 py-4 space-y-1">
+      <a href="{{ url_for('dashboard.home') }}" class="block px-3 py-2 rounded hover:bg-slate-100">Dashboard</a>
+      <a class="block px-3 py-2 rounded hover:bg-slate-100" href="#">Tasks</a>
+      <a class="block px-3 py-2 rounded hover:bg-slate-100" href="#">Projects</a>
+      <a class="block px-3 py-2 rounded hover:bg-slate-100" href="#">Analytics</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="flex-1">
+
+    <!-- TOP NAV -->
+    <header class="bg-white border-b sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto h-16 flex items-center justify-between px-6">
+
+        <h1 class="text-lg font-semibold">{% block header_title %}{% endblock %}</h1>
+
+        <div class="flex items-center gap-4">
+          <input type="search" placeholder="Search..." class="border rounded-md px-3 py-2 bg-slate-50 text-sm">
+          <a class="px-4 py-2 bg-indigo-600 text-white rounded-md" href="#">Get Started</a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <main>
+      <div class="max-w-7xl mx-auto py-8 px-6">
+        <h2 class="text-3xl font-bold">{% block page_title %}{% endblock %}</h2>
+        <p class="text-slate-600 mt-2">{% block page_subtitle %}{% endblock %}</p>
+        
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+  </div>
+</div>
+
+</body>
+</html>

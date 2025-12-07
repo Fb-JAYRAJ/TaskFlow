@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Analytics — TaskFlow{% endblock %}
+{% block header_title %}Analytics{% endblock %}
+{% block page_title %}Insights & Reports{% endblock %}
+{% block page_subtitle %}Track performance and productivity{% endblock %}
+
+{% block content %}
+
+<!-- ANALYTICS GRID -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <!-- COMPLETED -->
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border dark:border-slate-700 shadow-sm">
+    <h3 class="text-sm text-slate-500 dark:text-slate-400">Completed Tasks</h3>
+    <p class="text-3xl font-bold text-slate-900 dark:text-white mt-3">{{ completed }}</p>
+  </div>
+
+  <!-- PENDING -->
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border dark:border-slate-700 shadow-sm">
+    <h3 class="text-sm text-slate-500 dark:text-slate-400">Pending Tasks</h3>
+    <p class="text-3xl font-bold text-slate-900 dark:text-white mt-3">{{ pending }}</p>
+  </div>
+
+  <!-- PROJECT COUNT -->
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border dark:border-slate-700 shadow-sm">
+    <h3 class="text-sm text-slate-500 dark:text-slate-400">Total Projects</h3>
+    <p class="text-3xl font-bold text-slate-900 dark:text-white mt-3">{{ projects|length }}</p>
+  </div>
+
+</div>
+
+<!-- CHART -->
+<div class="bg-white dark:bg-slate-800 rounded-xl p-6 mt-8 border dark:border-slate-700 shadow-sm">
+  <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-4">Weekly Activity</h3>
+
+  <div class="h-64">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- RAW BLOCK FIX (removes VS Code red errors) -->
+{% raw %}
+<script>
+  const ctx = document.getElementById("chart");
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels:
+{% endraw %}
+        {{ labels|tojson }},
+{% raw %}
+      datasets: [{
+        label: "Tasks Completed",
+        borderWidth: 2,
+        borderColor: "#6366f1",
+        backgroundColor: "rgba(99,102,241,0.2)",
+        data:
+{% endraw %}
+          {{ values|tojson }},
+{% raw %}
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      elements: {
+        line: { tension: 0.4 }
+      },
+      scales: {
+        y: { ticks: { color: "#94a3b8" } },
+        x: { ticks: { color: "#94a3b8" } }
+      }
+    }
+  });
+</script>
+{% endraw %}
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — TaskFlow{% endblock %}
+{% block header_title %}Dashboard{% endblock %}
+{% block page_title %}Welcome to TaskFlow{% endblock %}
+{% block page_subtitle %}Your productivity dashboard{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+  <div class="bg-white p-6 rounded-lg border">
+    <h3 class="text-sm text-slate-600">Tasks Due</h3>
+    <div class="mt-4 text-3xl font-bold">{{ tasks_due }}</div>
+    <p class="text-sm text-slate-500 mt-1">In the next few days</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg border">
+    <h3 class="text-sm text-slate-600">Completed</h3>
+    <div class="mt-4 text-3xl font-bold">{{ completed }}</div>
+    <p class="text-sm text-slate-500 mt-1">This month</p>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg border">
+    <h3 class="text-sm text-slate-600">Projects</h3>
+    <div class="mt-4 text-xl font-semibold">{{ projects|length }}</div>
+    <p class="text-sm text-slate-500 mt-1">Active projects</p>
+  </div>
+
+</div>
+
+<div class="bg-white p-6 rounded-lg border mt-8">
+  <h3 class="text-lg font-semibold mb-4">Recent Tasks</h3>
+
+  <ul class="divide-y">
+    {% for task in recent_tasks %}
+    <li class="py-3 flex justify-between">
+      <span>{{ task.title }}</span>
+      <span class="text-sm text-slate-500">{{ task.created_at.strftime('%d %b') }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

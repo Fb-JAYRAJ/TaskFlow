@@ -1,0 +1,26 @@
+{% macro nav_item(label, href, icon_name=None) %}
+  {# active ONLY when the current path exactly matches this link #}
+  {% set is_active = (request.path == href) %}
+
+  <a href="{{ href }}"
+     class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
+            {% if is_active %}
+              bg-indigo-600 text-white shadow-sm
+            {% else %}
+              text-slate-200 hover:text-white
+            {% endif %}">
+    
+    {% if icon_name %}
+      <i data-lucide="{{ icon_name }}"
+         class="w-5 h-5
+                {% if is_active %}
+                  text-white
+                {% else %}
+                  text-slate-300
+                {% endif %}">
+      </i>
+    {% endif %}
+
+    <span class="truncate">{{ label }}</span>
+  </a>
+{% endmacro %}

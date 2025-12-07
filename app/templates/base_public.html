@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>{% block title %}TaskFlow{% endblock %}</title>
+
+  <!-- Your compiled Tailwind / app styles -->
+  <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet"/>
+
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    html.dark { color-scheme: dark; }
+    [x-cloak] { display:none !important; }
+
+    /* HARD OVERRIDE: make sure <main> is NOT a flex container that
+       shoves everything to the right from some older layout. */
+    main {
+      display: block !important;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const stored = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (stored === "dark" || (!stored && prefersDark)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    })();
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const nowDark = !html.classList.contains("dark");
+      html.classList.toggle("dark", nowDark);
+      localStorage.setItem("theme", nowDark ? "dark" : "light");
+      updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+      const el = document.getElementById("theme-icon");
+      if (!el) return;
+      const dark = document.documentElement.classList.contains("dark");
+      el.setAttribute("data-lucide", dark ? "sun" : "moon");
+      lucide.createIcons();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      updateThemeIcon();
+    });
+  </script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-50">
+
+  <div class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur">
+      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white font-semibold shadow">
+            TF
+          </div>
+          <div class="leading-tight">
+            <div class="text-sm font-semibold tracking-tight">TaskFlow</div>
+            <div class="text-[11px] text-slate-400">productivity OS</div>
+          </div>
+        </div>
+
+        <!-- Right actions -->
+        <div class="flex items-center gap-3 text-sm">
+          <button onclick="toggleTheme()"
+                  class="p-2 rounded-lg border border-slate-700 hover:bg-slate-800">
+            <i id="theme-icon" data-lucide="moon" class="w-4 h-4"></i>
+          </button>
+
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('dashboard.home') }}"
+               class="px-3 py-1.5 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-medium">
+              Open dashboard
+            </a>
+            <a href="{{ url_for('auth.logout') }}"
+               class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800">
+              Logout
+            </a>
+          {% else %}
+            <a href="{{ url_for('auth.login') }}"
+               class="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800">
+              Login
+            </a>
+            <a href="{{ url_for('auth.register') }}"
+               class="px-3 py-1.5 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-medium">
+              Create account
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN: normal centered container -->
+    <main class="flex-1">
+      <div class="max-w-5xl mx-auto px-4 py-10 md:py-16">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-800/80">
+      © {{ now().year }} TaskFlow · built by Jayraj & Ace
+    </footer>
+
+  </div>
+
+</body>
+</html>

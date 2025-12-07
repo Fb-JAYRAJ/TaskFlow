@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Projects — TaskFlow{% endblock %}
+{% block header_title %}Projects{% endblock %}
+{% block page_title %}Your Projects{% endblock %}
+{% block page_subtitle %}Organize your work into projects{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+  {% for project in projects %}
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-6 border dark:border-slate-700 shadow-sm">
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-white">
+      {{ project.name }}
+    </h3>
+
+    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
+      {{ project.description or "No description provided." }}
+    </p>
+
+    <p class="text-xs text-slate-400 mt-4">
+      Created: {{ project.created_at.strftime('%d %b %Y') }}
+    </p>
+  </div>
+  {% endfor %}
+
+  {% if not projects %}
+  <p class="text-slate-500 dark:text-slate-400">No projects yet.</p>
+  {% endif %}
+
+</div>
+
+{% endblock %}

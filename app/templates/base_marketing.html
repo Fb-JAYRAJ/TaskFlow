@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <title>{% block title %}TaskFlow{% endblock %}</title>
+
+  <!-- Tailwind CSS -->
+  <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet"/>
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-50">
+
+  <header class="border-b border-slate-800 bg-slate-950">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="{{ url_for('core.index') }}" class="flex items-center gap-2">
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500
+                    flex items-center justify-center text-xs font-semibold text-white shadow-lg">
+          TF
+        </div>
+        <span class="text-sm sm:text-base font-semibold tracking-tight">
+          TaskFlow
+        </span>
+      </a>
+
+      <div class="flex items-center gap-3 text-xs sm:text-sm">
+        <a href="{{ url_for('auth.login') }}"
+           class="px-4 py-1.5 rounded-full border border-slate-600
+                  text-slate-50 hover:bg-slate-800 transition">
+          Login
+        </a>
+        <a href="{{ url_for('auth.register') }}"
+           class="px-4 py-1.5 rounded-full bg-indigo-500 hover:bg-indigo-400
+                  text-white font-medium shadow-[0_0_26px_rgba(129,140,248,0.8)] transition">
+          Create account
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-slate-800 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 text-[11px] text-slate-500 text-center">
+      &copy; {{ now().year }} TaskFlow · built by Jayraj &amp; Ace
+    </div>
+  </footer>
+</body>
+</html>
