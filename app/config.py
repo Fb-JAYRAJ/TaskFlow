@@ -1,35 +1,17 @@
-# app/config.py
 import os
-from pathlib import Path
-
-# /src/app
-BASE_DIR = Path(__file__).resolve().parent
-
-# Default local DB path: /src/instance/taskflow.db
-default_db_path = BASE_DIR.parent / "instance" / "taskflow.db"
-
-# On Render we’ll store the sqlite file in /tmp (always writable there)
-# We'll signal that with an env var RENDER=1 on Render
-if os.environ.get("RENDER") == "1":
-    default_db_path = Path("/tmp") / "taskflow.db"
-
-# Make sure the folder exists
-default_db_path.parent.mkdir(parents=True, exist_ok=True)
-
 
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret")
 
-    # Use DATABASE_URL (for future Postgres) or fallback to sqlite file
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL",
-        f"sqlite:///{default_db_path}",
-    )
+    db_url = os.environ.get("DATABASE_URL")
 
-    # Render sometimes gives old-style postgres:// URLs
-    if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
-        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace(
-            "postgres://", "postgresql://", 1
-        )
+    if db_url:
+        # If in future we use Postgres on Render
+        if db_url.startswith("postgres://"):
+            db_url = db_url.replace("postgres://", "postgresql://", 1)
+        SQLALCHEMY_DATABASE_URI = db_url
+    else:
+        # ✅ Always use /tmp for SQLite (works on Render & locally)
+        SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/taskflow.db"
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
